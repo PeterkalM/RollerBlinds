@@ -1,4 +1,3 @@
-#include "DS3232RTC.h"
 #include <ESP8266WiFi.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
@@ -22,8 +21,6 @@ volatile unsigned int turns = 0;
 volatile unsigned int saved_turns = 0;
 volatile bool direction = false; // false - forward; true - reverse
 bool moving = false;
-
-DS3232RTC myRTC(false);
 
 ICACHE_RAM_ATTR void encoder() {
   /* Increase/decrease total encoder count */
@@ -143,37 +140,6 @@ void setup() {
     request->send(200, "text/plain", "ok");
   });
 
-  server.on("/get_time", HTTP_GET, [] (AsyncWebServerRequest *request) {
-    int h = hour();
-    int min = minute();
-    request->send(200, "text/plain", String(h) + String(":") + String(min));
-  });
-
-  server.on("/set_time", HTTP_GET, [] (AsyncWebServerRequest *request) {
-    int h = request->getParam("h")->value().toInt();
-    int min = request->getParam("min")->value().toInt();
-
-    setTime(h, min, 0, 1, 1, 2020); // h,m,s - d,mo,y
-    myRTC.set(now());
-    request->send(200, "text/plain", "ok");
-  });
-
-  server.on("/set_alarm1", HTTP_GET, [] (AsyncWebServerRequest *request) {
-    int h = request->getParam("h")->value().toInt();
-    int min = request->getParam("min")->value().toInt();
-    Serial.println("Setting alarms1");
-    myRTC.setAlarm(ALM1_MATCH_HOURS, 0, min, h);
-    request->send(200, "text/plain", "ok");
-  });
-
-  server.on("/set_alarm2", HTTP_GET, [] (AsyncWebServerRequest *request) {
-    int h = request->getParam("h")->value().toInt();
-    int min = request->getParam("min")->value().toInt();
-    Serial.println("Setting alarms2");
-    myRTC.setAlarm(ALM2_MATCH_HOURS, 0, min, h);
-    request->send(200, "text/plain", "ok");
-  });
-
   server.on("/get_turns", HTTP_GET, [] (AsyncWebServerRequest *request) {
     request->send(200, "text/plain", String(turns));
   });
@@ -195,12 +161,6 @@ void setup() {
   server.onNotFound(notFound);
   server.begin();
   Serial.println("HTTP server started");
-
-  /* RTC setup */
-  myRTC.begin();
-  setTime(0, 0, 0, 1, 1, 2020); // h,m,s - d,mo,y
-  myRTC.set(now());
-  //setSyncProvider(myRTC.get);
 }
 
 void loop() {}

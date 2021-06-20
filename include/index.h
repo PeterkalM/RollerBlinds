@@ -71,16 +71,6 @@ const char MAIN_page[] PROGMEM = R"=====(
   <br>
   <button class="button" onmouseup="moveDown();">Keri alla</button>
   <button class="button" onmouseup="moveUp();">Keri yles</button>
-  <br><hr>
-  <h3>Aja seadistamine</h3>
-  <b>Praegune aeg:</b> <span id="current-time">00:00</span>
-  <br>
-  <b>Sisesta aeg:</b>
-  <input id="next-time" type="time" name="next-time" value="00:00">
-  <button class="button" onmouseup="setTime('set_time');">Aja salvestus</button>
-  <br>
-  <br>
-  <br>
   <script>
     function toggleMotor(x) {
       var xhr = new XMLHttpRequest();
@@ -97,28 +87,6 @@ const char MAIN_page[] PROGMEM = R"=====(
     function moveDown(x) {
       var xhr = new XMLHttpRequest();
       xhr.open("GET", "/move_down", true);
-      xhr.send();
-    }
-    
-    function setTime(x) {
-      var time = document.getElementById("next-time").value.split(':');
-      var hour = time[0];
-      var min = time[1];
-
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "/" + x + "?h=" + hour + "&min=" + min, true);
-      xhr.send();
-    } 
-
-    function loadTime(){
-      var xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState == XMLHttpRequest.DONE) {
-          var x = xhr.responseText
-          document.getElementById("current-time").innerHTML = x
-        }
-      }
-      xhr.open('GET', '/get_time', true);
       xhr.send();
     }
 
