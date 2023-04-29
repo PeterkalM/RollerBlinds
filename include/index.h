@@ -112,12 +112,12 @@ const char MAIN_page[] PROGMEM = R"=====(
       <button class="button btn-alert" onclick="toggleMotor('brake');">X</button>
     </div>
     <div id="top-content">
-      <button class="button control" onclick="toggleMotor('reverse');">
+      <button class="button control" onclick="toggleMotor('up');">
       <span class="arrow">&#x2191;</span>
       </button>
     </div>
     <div id="bottom-content">
-      <button class="button control" onclick="toggleMotor('forward');">
+      <button class="button control" onclick="toggleMotor('down');">
       <span class="arrow">&#x2193;</span>
       </button>
     </div>
