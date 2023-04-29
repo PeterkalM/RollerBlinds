@@ -46,4 +46,6 @@ void setupWebServer() {
   server.onNotFound([](AsyncWebServerRequest* request) {
     request->send(404, "text/plain", "Not found");
   });
+
+  server.begin();
 }
